@@ -1,0 +1,5 @@
+dynamic_compare:
+  js:
+    js/dynamic_compare.js: {}
+  dependencies:
+    - core/drupalSettings

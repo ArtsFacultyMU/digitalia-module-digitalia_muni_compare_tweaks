@@ -1,0 +1,7 @@
+name: Entity compare tweaks
+type: module
+description: 'Various tweaks to entity_compare module'
+package: custom
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:entity_comparison
