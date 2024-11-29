@@ -1,4 +1,4 @@
-function toggle_comparison_visibility(settings)
+async function toggle_comparison_visibility(settings)
 {
 	const compare_block = document.querySelector(settings["block_selector"]);
 	const compare_block_text = compare_block.querySelector(settings["text_selector"]);
@@ -10,12 +10,16 @@ function toggle_comparison_visibility(settings)
 	if (compare_block_text.innerHTML == "Compare (0)") {
 	    compare_block.classList.remove("fade-in");
 	    compare_block.classList.add("fade-out");
+	    apply_styles(settings);
+      await new Promise(r => setTimeout(r, 500));
+      compare_block.classList.add("hidden");
 	} else {
 	    compare_block.classList.add("fade-in");
 	    compare_block.classList.remove("fade-out");
+      compare_block.classList.remove("hidden");
+	    apply_styles(settings);
 	}
 
-	apply_styles(settings);
 }
 
 
