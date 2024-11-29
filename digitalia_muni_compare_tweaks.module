@@ -24,63 +24,63 @@ function digitalia_muni_compare_tweaks_page_attachments(array &$attachements)
  */
 function digitalia_muni_universal_form_entity_comparison_rows_alter(array &$header, array &$rows, array $comparison_context)
 {
-        $group_code = $comparison_context["entity_comparison"]->get("group_name");
-        $metadata = array();
-        $nodes = array();
+	$group_code = $comparison_context["entity_comparison"]->get("group_name");
+	$metadata = array();
+	$nodes = array();
 
-        for ($i = 0; $i < sizeof($rows); $i += 1) {
-                $media_of_row = -1;
+	for ($i = 0; $i < sizeof($rows); $i += 1) {
+		$media_of_row = -1;
 
-                // skip row header
-                for ($j = 1; $rows[$i][0] == "Media of" && $j < sizeof($rows[$i]); $j += 1) {
-                        $media_of_row = $i;
-                        $nid = trim(strip_tags($rows[$i][$j]));
-                        array_push($metadata, json_decode(getMetadata($group_code, $nid), TRUE));
-                        array_push($nodes, \Drupal::entityTypeManager()->getStorage("node")->load($nid));
-                        $header[$j]["data"]["#url"] = \Drupal\Core\Url::fromUserInput("/{$group_code}/node/{$nid}");
-                }
+		// skip row header
+		for ($j = 1; $rows[$i][0] == "Media of" && $j < sizeof($rows[$i]); $j += 1) {
+			$media_of_row = $i;
+			$nid = trim(strip_tags($rows[$i][$j]));
+			array_push($metadata, json_decode(getMetadata($group_code, $nid), TRUE));
+			array_push($nodes, \Drupal::entityTypeManager()->getStorage("node")->load($nid));
+			$header[$j]["data"]["#url"] = \Drupal\Core\Url::fromUserInput("/{$group_code}/node/{$nid}");
+		}
 
-                if ($media_of_row > 0) {
-                        unset($rows[$media_of_row]);
-                }
+		if ($media_of_row > 0) {
+			unset($rows[$media_of_row]);
+		}
 
-        }
+	}
 
-        foreach ($metadata[0][0]  as $field => $value) {
-                // temporarily using machine name
-                $new_row = [$field];
+	foreach ($metadata[0][0]  as $field => $value) {
+		// temporarily using machine name
+		$new_row = [$field];
 
-                $empty_flag = 0;
-                for ($i = 0; $i < sizeof($metadata); $i += 1) {
-                        $empty_flag += strlen($metadata[$i][0][$field]);
-                        array_push($new_row, strip_tags($metadata[$i][0][$field]));
+		$empty_flag = 0;
+		for ($i = 0; $i < sizeof($metadata); $i += 1) {
+			$empty_flag += strlen($metadata[$i][0][$field]);
+			array_push($new_row, strip_tags($metadata[$i][0][$field]));
 
-                        // set header to A3D object instead of media
-                        //if ($field == "field_artefact_appellation") {
-                        //      //\Drupal::logger("TEST")->debug($i);
-                        //      //\Drupal::logger("TEST")->debug($header[$i + 1]["data"]["#title"]);
-                        //      $header[$i + 1]["data"]["#title"] = $metadata[$i][0][$field];
-                        //}
-                }
+			// set header to A3D object instead of media
+			//if ($field == "field_artefact_appellation") {
+			//      //\Drupal::logger("TEST")->debug($i);
+			//      //\Drupal::logger("TEST")->debug($header[$i + 1]["data"]["#title"]);
+			//      $header[$i + 1]["data"]["#title"] = $metadata[$i][0][$field];
+			//}
+		}
 
-                if ($empty_flag > 0 && $field != "field_artefact_appellation") {
-                        // set correct name
-                        $new_row[0] = $nodes[0]->get($field)->getFieldDefinition()->label();
-                        array_push($rows, $new_row);
-                }
-        }
+		if ($empty_flag > 0 && $field != "field_artefact_appellation") {
+			// set correct name
+			$new_row[0] = $nodes[0]->get($field)->getFieldDefinition()->label();
+			array_push($rows, $new_row);
+		}
+	}
 }
 
 function getMetadata($group_code, $nid)
 {
-        $client = \Drupal::httpClient();
+	$client = \Drupal::httpClient();
 
-        $response = $client->request(
-                "GET",
-                "https://neofig-devel.phil.muni.cz/" . $group_code . "/node/" . $nid . "/export_compare?_format=json",
-        );
+	$response = $client->request(
+		"GET",
+		"https://neofig-devel.phil.muni.cz/" . $group_code . "/node/" . $nid . "/export_compare?_format=json",
+	);
 
-        return $response->getBody()->getContents();
+	return $response->getBody()->getContents();
 }
 
 ?>
