@@ -52,7 +52,13 @@ function unhide(settings)
 
 function init(drupalSettings)
 {
-	let PLATFORM_CODE = document.querySelector(".site-branding__logo").href.split("/").pop();
+	const logo_block = document.querySelector("header .block-sitelogo .content a");
+
+	if (!logo_block) {
+		return;
+	}
+
+	const PLATFORM_CODE = logo_block.href.split("/").pop();
 
 	if (PLATFORM_CODE == "") {
 		PLATFORM_CODE = "a3d";
