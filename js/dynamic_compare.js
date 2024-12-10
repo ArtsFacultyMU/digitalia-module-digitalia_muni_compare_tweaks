@@ -58,7 +58,7 @@ function init(drupalSettings)
 		return;
 	}
 
-	const PLATFORM_CODE = logo_block.href.split("/").pop();
+	let PLATFORM_CODE = logo_block.href.split("/").pop();
 
 	if (PLATFORM_CODE == "") {
 		PLATFORM_CODE = "a3d";
