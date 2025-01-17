@@ -77,7 +77,7 @@ function getMetadata($group_code, $nid)
 
 	$response = $client->request(
 		"GET",
-		"https://neofig-devel.phil.muni.cz/" . $group_code . "/node/" . $nid . "/export_compare?_format=json",
+		"http://localhost/" . $group_code . "/node/" . $nid . "/export_compare?_format=json",
 	);
 
 	return $response->getBody()->getContents();
