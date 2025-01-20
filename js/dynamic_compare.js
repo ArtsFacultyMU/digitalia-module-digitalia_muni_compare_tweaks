@@ -78,6 +78,11 @@ function init(drupalSettings)
 
 	console.log(drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare);
 
+	if (!document.querySelector(settings["block_selector"])) {
+    return;
+  }
+
+
 	window.XMLHttpRequest = new_xhr.bind(this, old_xhr, settings);
 	
 	apply_styles(settings);
