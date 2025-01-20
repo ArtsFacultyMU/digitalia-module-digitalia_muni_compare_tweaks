@@ -7,7 +7,7 @@ async function toggle_comparison_visibility(settings)
 		compare_block.classList.add("hidden");
 	}
 	
-	if (compare_block_text.innerHTML == "Compare (0)") {
+	if (compare_block_text.innerHTML.includes("(0)")) {
 		compare_block.classList.remove("fade-in");
 		compare_block.classList.add("fade-out");
 		compare_block.classList.add("no-click");
@@ -52,21 +52,31 @@ function unhide(settings)
 
 function init(drupalSettings)
 {
+	const is_metaplatform = drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare["groups_enabled"];
+
+	let compare_code = "no_groups";
+
+
 	const logo_block = document.querySelector("header .block-sitelogo .content a");
 
-	if (!logo_block) {
+	if (!logo_block && is_metaplatform) {
+		console.log("No logo block found");
 		return;
 	}
+	if (is_metaplatform) {
+		let platform_code = logo_block.href.split("/").pop();
+		if (platform_code == "") {
+			platform_code = "a3d";
+		}
 
-	let PLATFORM_CODE = logo_block.href.split("/").pop();
-
-	if (PLATFORM_CODE == "") {
-		PLATFORM_CODE = "a3d";
+		compare_code = platform_code;
 	}
 
 	let old_xhr = window.XMLHttpRequest;
 
-	const settings = drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare[PLATFORM_CODE];
+	const settings = drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare[compare_code];
+
+	console.log(drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare);
 
 	window.XMLHttpRequest = new_xhr.bind(this, old_xhr, settings);
 	

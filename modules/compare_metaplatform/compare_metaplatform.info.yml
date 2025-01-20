@@ -1,0 +1,9 @@
+name: Metaplatform tweaks
+type: module
+description: 'Tweaks for metaplatforms'
+package: custom
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - drupal:digitalia_muni_compare_tweaks
+  - drupal:entity_comparison
+  - drupal:group
