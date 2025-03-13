@@ -14,7 +14,12 @@ function digitalia_muni_compare_tweaks_page_attachments(array &$attachements)
 		$identifiers["group_code"] = "no_groups";
 		if ($groups_enabled) {
 			$identifiers["group_code"] = $entity_comparison->getGroupName();
-			$identifiers["group_id"] = array_keys(\Drupal\group\Entity\Group::loadMultiple(\Drupal::entityQuery("group")->condition("field_group_code", $identifiers["group_code"])->accessCheck(TRUE)->execute()))[0];
+      $identifiers["group_id"] = null;
+      $tmp_ids = array_keys(\Drupal\group\Entity\Group::loadMultiple(\Drupal::entityQuery("group")->condition("field_group_code", $identifiers["group_code"])->accessCheck(TRUE)->execute()));
+
+      if (isset($tmp_ids[0])) {
+			  $identifiers["group_id"] = $tmp_ids[0];
+      }
 		}
 
 		$settings['groups_enabled'] = $groups_enabled;
@@ -25,11 +30,6 @@ function digitalia_muni_compare_tweaks_page_attachments(array &$attachements)
 		  $settings[$identifier]['comparison_url_snippet'] = str_replace('_', '-', $id);
     }
 	}
-
-	\Drupal::logger("DEBUG_COMPARE_TRUE")->debug(true);
-	\Drupal::logger("DEBUG_COMPARE_FALSE")->debug(false);
-	\Drupal::logger("DEBUG_COMPARE")->debug($groups_enabled);
-	\Drupal::logger("DEBUG_COMPARE")->debug(print_r($settings, TRUE));
 
 	$attachements['#attached']['library'][] = 'digitalia_muni_compare_tweaks/dynamic_compare';
 	$attachements['#attached']['drupalSettings']['digitaliaMuniCompareTweaks']['dynamicCompare'] = $settings;
