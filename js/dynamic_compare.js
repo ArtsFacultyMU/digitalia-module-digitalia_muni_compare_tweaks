@@ -76,9 +76,9 @@ function init(drupalSettings)
 
 	const settings = drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare[compare_code];
 
-	console.log(drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare);
+	//console.log(drupalSettings.digitaliaMuniCompareTweaks.dynamicCompare);
 
-	if (!document.querySelector(settings["block_selector"])) {
+	if (!settings || !document.querySelector(settings["block_selector"])) {
     return;
   }
 
